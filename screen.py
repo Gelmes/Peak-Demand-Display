@@ -37,7 +37,7 @@ class Screen:
     def set_full_screen(self):
         pygame.display.quit()
         pygame.display.init()
-        self.screen = pygame.display.set_mode(self.size, pygame.FULL_SCREEN)
+        self.screen = pygame.display.set_mode(self.size, pygame.FULLSCREEN)
 
     def draw_text(self, string, pos, color, vertical=0):
         """

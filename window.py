@@ -14,7 +14,8 @@ class Window:
         self.x_zoom = 1
  
         self.screen = screen
-        self.border_color = (200,200,200)
+        self.border_color = (100,100,100)
+        self.font_color = (100,100,100)
         self.border_width = 2
 
         #Axis Stuff
@@ -31,6 +32,20 @@ class Window:
         
         for val in range(self.num_y_axis):
             self.x_array.append([(-1 * self.width * self.x_zoom * self.x), "0"])
+
+    def set_all_colors(self, color):
+        self.axis_color = color
+        self.font_color = color
+        self.border_color = color
+
+    def set_axis_color(self, color):
+        self.axis_color = color
+
+    def set_font_colot(self, color):
+        self.font_color = color
+
+    def set_border_color(self, color):
+        self.border_color = color
 
     def draw_x_axis(self, axis_text=1):
         """
@@ -53,7 +68,7 @@ class Window:
             x = self.width - ((self.max_x - val[0]) * self.x_zoom) + self.x
             self.screen.draw_line(self.axis_color, [x,y1], [x,y2], self.axis_width)
             if(axis_text):
-                self.screen.draw_text(str(val[1]), [x, y2], (200,200,200), vertical=1)
+                self.screen.draw_text(str(val[1]), [x, y2], self.font_color, vertical=1)
             
 
     def draw_y_axis(self, axis_text=1, snap=1):
@@ -83,8 +98,8 @@ class Window:
                     self.screen.draw_line(self.axis_color, start, stop, self.axis_width)
                     if(axis_text):
                         x = self.x + self.width + 20
-                        self.screen.draw_text(str(counter), [x, y_pos], (200,200,200), 0)
-                        self.screen.draw_text(str(-1 * counter), [x, y_neg], (200,200,200), 0)
+                        self.screen.draw_text(str(counter), [x, y_pos], self.font_color, 0)
+                        self.screen.draw_text(str(-1 * counter), [x, y_neg], self.font_color, 0)
                     counter += step            
         else:
             counter = self.y #started from the bottom now we here
@@ -118,6 +133,7 @@ class Window:
     def set_zoom(self, zoom):
         self.x_zoom = zoom
 
+
     def draw_charts(self):
         self.scale_charts(self.x_zoom)
         for i in range(len(self.scaled_chart_data)):
@@ -127,6 +143,7 @@ class Window:
                 self.screen.draw_lines(color, self.scaled_chart_data[i], width)
             except ValueError:
                 #Chart is out of drawing range
+                print "Window Error: draw_charts() ValueError"
                 pass
                 
 
@@ -149,9 +166,9 @@ class Window:
 
     def draw(self):
         self.get_charts_max()
+        self.draw_charts()
         self.draw_x_axis()
         self.draw_y_axis()
-        self.draw_charts()
         self.draw_borders()
     
 

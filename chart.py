@@ -20,6 +20,8 @@ class Chart:
         self.MARINE = (62, 128, 62)
 
         self.data = []
+        self.conv_data = [] #converted version of the data
+        self.max_label = "0"
         self.max_y = 1
         self.x_scale = 100
         self.y_scale = 100
@@ -29,23 +31,70 @@ class Chart:
 
         self.width = 2
         self.color = (100,100,100)
+        self.convertion_function = 0
+
+    def get_last_label(self):
+        return self.max_label
+
+    def convert(self):
+        """
+        This convertion function is really powerful as
+        it allows a user to be able to convert a part of the
+        data to a different value and thus be manipulated
+        numerically as required by the wyndow.
+
+        This was added as a method of allowing the user to
+        pass any sort of date formmat and converted to a
+        number for witch the window can use.
+        """
+        #needs to be optimized to only convert rightmost data
+        if(self.convertion_function != 0):
+            self.conv_data = []
+            for point in self.data:
+                self.conv_data.append(self.convertion_function(point))
+        
+        
+
+    def set_conv_funct(self, function):
+        """
+        Sets a convertion function that is used to properly
+        convert the data stored before returned
+        """
+        self.convertion_function = function
 
     def get_data(self):
-        return self.data
+        if (self.convertion_function == 0):
+            return self.data
+        else:
+            return self.conv_data
 
-    def get_rightmost_data(self, width):
+    def get_rightmost_data(self, width, maxx=0):
         """
         Grabs the latest/rightmost data that is
         within the specified width. the datas
         x value is used in the comparison.
+
+        a costum max is provided to allow external
+        control of the maxpoint in a window. This
+        can come from a chart with data that is more
+        up to date
         """
+
+        #if a convertion function is availlable then use it
+        if(self.convertion_function == 0):
+            self_data = self.data
+        else:
+            self_data = self.conv_data
         data = []
         i = -1
-        max_x = self.data[-1][0]
-        length = len(self.data)
-        while((max_x - self.data[i][0]) < width):
+        max_x = self_data[-1][0]
+        if (maxx):
+            max_x = maxx
+            
+        length = len(self_data)
+        while((max_x - self_data[i][0]) < width):
             #print max_x, self.data[i][0], width, i, length
-            data.append(self.data[i])
+            data.append(self_data[i])
             i -= 1
             if((i*-1) > length):
                 break
@@ -70,29 +119,40 @@ class Chart:
     def set_width(self, width):
         self.width = width
 
-    def get_max_y(self, width=0, right_most=1):
+    def get_max_values(self, width=0, right_most=1):
         """
         The width value just stops lookig for a max value
         after a certain point. 'right_most' sets this function
-        to start from the end of the data.
+        to start from the end of the data. The values returned
+        contain the maximum x and y values in all the points.
         """
+        if(self.convertion_function == 0):
+            self_data = self.data
+        else:
+            self_data = self.conv_data
+            
         start = right_most * -1
-        d = self.data[start]
+        d = self_data[start]
         max_y = 0
+        max_x = 0
         i = start #iterator
         #print self.data[-1][0], right_most, start, self.data[i][0], width
-        length = len(self.data)
-        while(((self.data[-1][0] * right_most) - self.data[i][0] * (2 * right_most - 1)) < width):
+        length = len(self_data)
+        while(((self_data[-1][0] * right_most) - self_data[i][0] * (2 * right_most - 1)) < width*2):
             #print i, self.data[-1][0], right_most, start, self.data[i][0], width
-            if(max_y < abs(self.data[i][1])):
-                max_y = abs(self.data[i][1])
+            if(max_y < abs(self_data[i][1])):
+                max_y = abs(self_data[i][1])
+            if(max_x < abs(self_data[i][0])):
+                max_x = abs(self_data[i][0])
+                self.max_label = self.data[i][0] #Pulls it from the original data
+                
             if(right_most and i > (-1 * length)):
                 i -= 1
             elif(not right_most and i < (length-1)):
                 i += 1
             else:
                 break
-        return max_y
+        return max_x, max_y
 
     def auto_scale_data(self, data, x_scale=1):
         """

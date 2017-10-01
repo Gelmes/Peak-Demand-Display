@@ -17,6 +17,7 @@ class Monitor:
         # Create Screen with the provided resolution
         self.screen = Screen(1920,1080)
         #self.screen.set_fps(10)
+        # NOTE: Remove comment on next line to add Full screen
         #self.screen.set_full_screen()
 
         size = self.screen.get_size()

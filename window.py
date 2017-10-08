@@ -47,6 +47,12 @@ class Window:
     def set_border_color(self, color):
         self.border_color = color
 
+    def set_border_width(self, width):
+        self.border_width = width
+
+    def set_axis_width(self, width):
+        self.axis_width = width
+
     def draw_x_axis(self, axis_text=1):
         """
         Make this work
@@ -146,7 +152,6 @@ class Window:
                 print "Window Error: draw_charts() ValueError"
                 pass
                 
-
     def get_charts_max(self):
         max_y = 0
         max_x = 0

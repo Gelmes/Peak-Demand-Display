@@ -31,6 +31,16 @@ class Screen:
         pygame.font.init()
         self.font = pygame.font.SysFont('Arial', 20)
 
+    def get_font(self, size, style='Arial'):
+        """
+        You can use any font installed in your system
+        """
+        return pygame.font.SysFont(style, size)
+
+    def scale(self, surface, width, height):
+        return pygame.transform.scale(surface, (width, height))
+        
+
     def get_size(self):
         return self.size
 
@@ -39,19 +49,28 @@ class Screen:
         pygame.display.init()
         self.screen = pygame.display.set_mode(self.size, pygame.FULLSCREEN)
 
-    def draw_text(self, string, pos, color, vertical=0):
+    def draw_text(self, string, pos, color, vertical=0, font=0):
         """
         Position is a set of x and y coordinates
         color is a tuple of size 3 with values from 0 to 255
         representing red, green, and blue
         """
-        text = self.font.render(string, False, color)
+        if(font):
+            text = font.render(string, False, color)
+        else:
+            text = self.font.render(string, False, color)
         if(not vertical):
             text = pygame.transform.rotate(text, 0)
             self.screen.blit(text, (pos[0]+5, pos[1]-(text.get_height()/2)))
         elif(vertical):
             text = pygame.transform.rotate(text, 90)
             self.screen.blit(text, (pos[0]-(text.get_width()/2), pos[1]+5))
+            
+    def load_image(self, src):
+        return pygame.image.load(src)
+
+    def draw_image(self, src, pos):
+        self.screen.blit(src, pos)
 
     def set_fps(self, fps):
         self.fps = fps

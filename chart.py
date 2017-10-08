@@ -33,6 +33,10 @@ class Chart:
         self.color = (100,100,100)
         self.convertion_function = 0
 
+    def clear(self):
+        self.data = []
+        self.conv_data = []
+
     def get_last_label(self):
         return self.max_label
 

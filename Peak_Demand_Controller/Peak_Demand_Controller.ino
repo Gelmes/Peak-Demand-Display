@@ -334,12 +334,24 @@ void printStates(){
       Serial.print(",");
       Serial.print(!digitalRead(M3_IN));
       Serial.print(",");
-      Serial.println(!digitalRead(LIGHT_IN));
+      Serial.print(!digitalRead(LIGHT_IN));
+      Serial.print(",");
+      Serial.print(!digitalRead(PLAY));
+      Serial.print(",");
+      Serial.print(!digitalRead(STOP));
+      Serial.print(",");
+      Serial.println(!digitalRead(get_selection()));
+}
+
+void getStates(){
+  Serial.readStringUntil("\n")
 }
 
 
 void loop() 
 {
+  state = 1; // Dont record or play back NOTE: remove this for original functinability
+  
   switch(state)
   {
     case 1:
@@ -353,7 +365,6 @@ void loop()
           digit(-1);
           debug_display = 1;
           button_states_prev = button_states_now;
-          printStates();
         }
         else if(select_states_now != select_states_prev){
           digit(-1);
@@ -365,11 +376,10 @@ void loop()
         else digit(get_selection()+1);
       }
       else{
-        normal();
+        //normal(); // NOTE: add back in
         digit(get_selection()+1);        
         if(button_states_now != button_states_prev){        
           button_states_prev = button_states_now;   
-          printStates();
         }
       }
       iterator = 0;
@@ -378,8 +388,8 @@ void loop()
       if(!digitalRead(STOP)){
         state = 2; //Go to recording state
         digit(-1);
-        rotate(60);
-        countDown(600);
+        rotate(60); // NOTE: add back in for nurmal function
+        countDown(600); // NOTE: add back in to work normal
       }
       if(!digitalRead(PLAY)){
         state = 3; //Go to recording state
@@ -426,5 +436,8 @@ void loop()
       break;
     default: state = 1; break;
   }
+  
+  delay(100);
+  printStates();
 }
 

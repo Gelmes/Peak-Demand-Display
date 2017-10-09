@@ -41,15 +41,15 @@ class Monitor:
         self.chart_og = Chart()
         self.chart_og.set_width(8)
         self.chart_og.set_color((255,150,0))
-        self.chart_og.add_point([1,1])
-        self.chart_og.add_point([2,1])
+        self.chart_og.add_point([1,0])
+        self.chart_og.add_point([2,0])
         self.window.add_chart(self.chart_og)
         
         self.chart_optimised = Chart()
         self.chart_optimised.set_width(8)
         self.chart_optimised.set_color((0,150,255))
-        self.chart_optimised.add_point([1,1])
-        self.chart_optimised.add_point([2,1])
+        self.chart_optimised.add_point([1,0])
+        self.chart_optimised.add_point([2,0])
         self.window.add_chart(self.chart_optimised)
         # Next we add a function that converts the X values to
         # something the window class can work with, simple numbers
@@ -65,6 +65,10 @@ class Monitor:
     def clear_charts(self):
         self.chart_og.clear()
         self.chart_optimised.clear()
+        self.chart_og.add_point([1,0])
+        self.chart_og.add_point([2,0])
+        self.chart_optimised.add_point([1,0])
+        self.chart_optimised.add_point([2,0])
 
     def convert(self, data):
         """

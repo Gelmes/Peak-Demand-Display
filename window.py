@@ -149,7 +149,7 @@ class Window:
                 self.screen.draw_lines(color, self.scaled_chart_data[i], width)
             except ValueError:
                 #Chart is out of drawing range
-                print "Window Error: draw_charts() ValueError"
+                print ("Window Error: draw_charts() ValueError")
                 pass
                 
     def get_charts_max(self):

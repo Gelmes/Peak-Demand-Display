@@ -19,6 +19,9 @@ class Simulator:
         self.sma_index = 0
 
         self.create_array(self.sma_length)
+
+    def clear(self):
+        self.create_array(self.sma_length)
         
     def create_array(self, length):
         for i in range(length):
